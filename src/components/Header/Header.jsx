@@ -6,7 +6,9 @@ export const Header = () => {
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>ToDo</h1>
       </div>
-      <div className={styles.infoContainer}></div>
+      <div className={styles.infoContainer}>
+        <div className={styles.divider}></div>
+      </div>
     </header>
   );
 };

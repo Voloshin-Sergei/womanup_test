@@ -1,0 +1,167 @@
+@import '../../less/variables';
+@import '../../less/mixins';
+
+.container {
+  display: flex;
+  gap: 3.4rem;
+  background-color: @color_lightness;
+  border-radius: 0.4rem;
+  padding: 1.5rem 0.8rem;
+
+  @media (max-width: @small) {
+    padding: 1rem 0.8rem;
+    gap: 3rem;
+  }
+
+  @media (max-width: @Xsmall) {
+    gap: 1.2rem;
+  }
+}
+
+.checkbox {
+  position: absolute;
+  left: -9999px;
+}
+
+.label {
+  cursor: pointer;
+  font-size: 1.5rem;
+  position: relative;
+
+  &:before {
+    content: '';
+    background-color: @color_light;
+    border: 0.2rem solid #ddd;
+    border-radius: 0.5rem;
+    display: inline-block;
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+
+    @media (max-width: @Xsmall) {
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.3rem;
+    }
+  }
+
+  &:after {
+    color: #2ecc71;
+    content: '\2713';
+    display: inline-block;
+    position: absolute;
+    left: 0.3rem;
+    transform: scale(0);
+    transition: transform 0.2s linear;
+  }
+}
+
+.checked.label:after {
+  transform: scale(1);
+}
+
+.info {
+  display: flex;
+  gap: 2.3rem;
+
+  @media (max-width: @small) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: @Xsmall) {
+    margin-left: 1rem;
+  }
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.date {
+  .text(@color_darken, 400, 1.6rem);
+  white-space: nowrap;
+
+  @media (max-width: @medium) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: @small) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: @Xsmall) {
+    font-size: 1rem;
+  }
+}
+
+.title {
+  .text(@color_dark, 400, 1.6rem);
+  padding-bottom: 0.5rem;
+
+  @media (max-width: @medium) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: @small) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: @Xsmall) {
+    padding-bottom: 0;
+    font-size: 1rem;
+  }
+}
+
+.description {
+  .text(@color_darken, 400, 1.4rem);
+
+  @media (max-width: @medium) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: @small) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: @Xsmall) {
+    display: none;
+  }
+}
+
+.file {
+  display: flex;
+  align-items: center;
+
+  @media (max-width: @Xsmall) {
+    display: none;
+  }
+}
+
+.icon {
+  .text(@color_darken, 400, 1.8rem);
+  margin-right: 1rem;
+
+  @media (max-width: @small) {
+    font-size: 1.6rem;
+  }
+}
+
+.name {
+  .text(@color_darken, 400, 1.4rem);
+
+  @media (max-width: @small) {
+    font-size: 1rem;
+  }
+}
+
+.delete {
+  .text(@color_alert, 400, 1.6rem);
+  line-height: 1.2rem;
+  cursor: pointer;
+
+  @media (max-width: @small) {
+    font-size: 1.4rem;
+  }
+}
