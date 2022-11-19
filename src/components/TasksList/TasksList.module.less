@@ -4,6 +4,7 @@
 .container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
   padding: 0 2rem;
 
@@ -14,5 +15,23 @@
 
   @media (max-width: @Xsmall) {
     padding: 0 0.5rem;
+  }
+}
+
+.addBtn {
+  width: 7rem;
+  height: 7rem;
+  background-color: @color_info;
+  box-shadow: 0 0.4rem 0.4rem rgba(0, 0, 0, 0.25);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  .text(@color_light, 400, 4rem);
+  line-height: 0;
+
+  @media (max-width: @Xsmall) {
+    width: 5rem;
+    height: 5rem;
+    font-size: 3rem;
   }
 }

@@ -9,6 +9,9 @@ export const TasksList = () => {
       <Task />
       <Task />
       <Task />
+      <button className={styles.addBtn}>
+        <span>&#10011;</span>
+      </button>
     </div>
   );
 };

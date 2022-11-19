@@ -1,5 +1,6 @@
 import { Header } from './components/Header/Header';
 import { TasksList } from './components/TasksList/TasksList';
+import { PopUp } from './components/PopUp/PopUp';
 
 import styles from './App.module.less';
 
