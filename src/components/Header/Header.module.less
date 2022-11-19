@@ -1,0 +1,44 @@
+@import '../../less/variables';
+@import '../../less/mixins';
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: @color_dark;
+  padding: 2rem 0;
+
+  @media (max-width: @small) {
+    padding: 1.5rem 0;
+  }
+
+  @media (max-width: @Xsmall) {
+    padding: 1rem 0;
+  }
+}
+
+.title {
+  .text(@color_light, 700, 4.8rem);
+
+  @media (max-width: @Xsmall) {
+    .text(@color_light, 700, 3.2rem);
+  }
+}
+
+.infoContainer {
+  background-color: @color_light;
+  padding: 4rem 0;
+
+  @media (max-width: @small) {
+    padding: 3rem 0;
+  }
+
+  @media (max-width: @Xsmall) {
+    padding: 2rem 0;
+  }
+}
