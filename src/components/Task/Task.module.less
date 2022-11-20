@@ -3,6 +3,7 @@
 
 .container {
   display: flex;
+  width: 100%;
   gap: 3.4rem;
   background-color: @color_lightness;
   border-radius: 0.4rem;
@@ -53,6 +54,10 @@
     left: 0.3rem;
     transform: scale(0);
     transition: transform 0.2s linear;
+
+    @media (max-width: @Xsmall) {
+      font-size: 1.1rem;
+    }
   }
 }
 
@@ -83,6 +88,10 @@
   .text(@color_darken, 400, 1.6rem);
   white-space: nowrap;
 
+  &__expired {
+    color: @color_alert;
+  }
+
   @media (max-width: @medium) {
     font-size: 1.4rem;
   }
@@ -99,6 +108,10 @@
 .title {
   .text(@color_dark, 400, 1.6rem);
   padding-bottom: 0.5rem;
+
+  &.done {
+    text-decoration: line-through;
+  }
 
   @media (max-width: @medium) {
     font-size: 1.4rem;
@@ -157,6 +170,7 @@
 }
 
 .delete {
+  margin-left: auto;
   .text(@color_alert, 400, 1.6rem);
   line-height: 1.2rem;
   cursor: pointer;
