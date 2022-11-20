@@ -10,7 +10,7 @@ export const PopUp = () => {
         </div>
         <form className={styles.form}>
           <div className={styles.group}>
-            <label className={styles.label} for="title" id="title">
+            <label className={styles.label} htmlFor="title" id="title">
               Title
             </label>
             <input
@@ -22,7 +22,7 @@ export const PopUp = () => {
             />
           </div>
           <div className={styles.group}>
-            <label className={styles.label} for="description" id="description">
+            <label className={styles.label} htmlFor="description" id="description">
               Description
             </label>
             <input
@@ -34,13 +34,13 @@ export const PopUp = () => {
             />
           </div>
           <div className={styles.group}>
-            <label className={styles.label} for="date" id="date">
+            <label className={styles.label} htmlFor="date" id="date">
               Date end
             </label>
             <input className={styles.input} type="date" id="date" required />
           </div>
           <div className={styles.group}>
-            <label className={styles.label} for="file" id="file">
+            <label className={styles.label} htmlFor="file" id="file">
               Upload file
             </label>
             <input className={`${styles.input} ${styles.file}`} type="file" id="file" />

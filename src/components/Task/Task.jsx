@@ -4,8 +4,8 @@ export const Task = () => {
   return (
     <div className={styles.container}>
       <div className={styles.checker}>
-        <input class={styles.checkbox} type="checkbox" id="checkbox" name="checkbox" />
-        <label class={`${styles.label} `} for="checkbox" />
+        <input className={styles.checkbox} type="checkbox" id="checkbox" name="checkbox" />
+        <label className={`${styles.label} `} htmlFor="checkbox" />
       </div>
       <div className={styles.info}>
         <span className={styles.date}>19 11 2022</span>
