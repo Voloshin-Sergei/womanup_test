@@ -1,5 +1,8 @@
 // @ts-check
 
+import { doc, deleteDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+
 import reversDate from '../../helpers/reversDate';
 import isExpired from '../../helpers/isExpired';
 
@@ -17,6 +20,16 @@ import styles from './Task.module.less';
 /** @param {PropType} props */
 export const Task = (props) => {
   const { id, title, description, deadline, completed } = props;
+
+  /**
+   * Delete task from db
+   * @async
+   * @function handleDelete
+   * @param {string} id task id
+   */
+  const handleDelete = async (id) => {
+    await deleteDoc(doc(db, 'todos', id));
+  };
 
   return (
     <div className={styles.container}>
@@ -41,7 +54,9 @@ export const Task = (props) => {
           </div>
         </div>
       </div>
-      <span className={styles.delete}>&#10006;</span>
+      <span onClick={() => handleDelete(id)} className={styles.delete}>
+        &#10006;
+      </span>
     </div>
   );
 };
