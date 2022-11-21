@@ -2,7 +2,7 @@
  * the function puts the year of the date at the end of the string and returns a new string
  * @function reversDate
  * @param {string} date current deadline date for task in db
- * @returns {string} date where the year is at the end of the string
+ * @returns {string} date where the year is at the end of the string, format 'MM-DD-YYYY'
  * @example
  * initial('2002-07-11');
  * / => ('07 11 2002');

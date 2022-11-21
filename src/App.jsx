@@ -1,15 +1,17 @@
 // @ts-check
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from './firebase';
 
 import { Header } from './components/Header/Header';
 import { TasksList } from './components/TasksList/TasksList';
-import { PopUp } from './components/PopUp/PopUp';
 
 import styles from './App.module.less';
 
+/**
+ * @returns {React.ReactElement}
+ */
 function App() {
   /**
    * App state, initial state is empty array
