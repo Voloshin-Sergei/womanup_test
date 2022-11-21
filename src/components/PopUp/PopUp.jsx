@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 
 import styles from './PopUp.module.less';
 
 /**
  * @typedef PropType
  * @property {function} handleShow
+ * @property {string} editTaskId
  */
 
 /**
@@ -14,7 +15,7 @@ import styles from './PopUp.module.less';
  * @returns {React.ReactElement}
  */
 export const PopUp = (props) => {
-  const { handleShow } = props;
+  const { handleShow, editTaskId = '' } = props;
 
   /**
    * State for title input value, initial state is empty string
@@ -28,6 +29,30 @@ export const PopUp = (props) => {
    * State for deadline date input value, initial state is empty string
    */
   const [deadline, setDeadline] = useState('');
+
+  /**
+   * Fetch task data from db and set state for inputs values
+   * @async
+   * @function getTask
+   * @param {string} id task id
+   */
+  const getTask = (id) => {
+    if (id) {
+      const unsub = onSnapshot(doc(db, 'todos', id), (doc) => {
+        setTitle(doc.data().title);
+        setDescription(doc.data().description);
+        setDeadline(doc.data().deadline);
+      });
+    }
+    return;
+  };
+
+  /**
+   * Callback for getTask function
+   */
+  useEffect(() => {
+    getTask(editTaskId);
+  }, [editTaskId]);
 
   /**
    * Set condition for input elements
@@ -75,11 +100,25 @@ export const PopUp = (props) => {
     handleShow();
   };
 
+  /**
+   * Edit task in db. Close PopUp
+   * @async
+   * @function editTask
+   */
+  const editTask = async () => {
+    if (title === '' || description === '' || deadline === '') {
+      return;
+    }
+
+    await updateDoc(doc(db, 'todos', editTaskId), { title, description, deadline });
+    handleShow();
+  };
+
   return (
     <div className={styles.layer}>
       <div className={styles.content}>
         <div className={styles.header}>
-          <span className={styles.type}>add task</span>
+          <span className={styles.type}>{editTaskId ? 'edit task' : 'add task'}</span>
           <span onClick={handleShow} className={styles.close}>
             &#10005;
           </span>
@@ -134,12 +173,19 @@ export const PopUp = (props) => {
           </div>
         </form>
         <div className={styles.buttons}>
-          <button
-            onClick={() => addTask(title, description, deadline)}
-            className={`${styles.btn} ${styles.btn__confirm}`}
-          >
-            Add
-          </button>
+          {editTaskId ? (
+            <button onClick={editTask} className={`${styles.btn} ${styles.btn__confirm}`}>
+              Done
+            </button>
+          ) : (
+            <button
+              onClick={() => addTask(title, description, deadline)}
+              className={`${styles.btn} ${styles.btn__confirm}`}
+            >
+              Add
+            </button>
+          )}
+
           <button onClick={handleShow} className={`${styles.btn} ${styles.btn__cancel}`}>
             Cancel
           </button>

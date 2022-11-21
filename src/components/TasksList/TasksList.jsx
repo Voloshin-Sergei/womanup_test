@@ -25,10 +25,27 @@ export const TasksList = (props) => {
   const [isShow, setShow] = useState(false);
 
   /**
-   * Set condition for PopUp component. Close or open popUp
+   * Id edit task, initial condition - empty string
+   */
+  const [editTaskId, setEditTaskId] = useState('');
+
+  /**
+   * Set condition for PopUp component. Close or open popUp.
+   * Set condition for task id state to empty string
    * @function handleShow
    */
   const handleShow = () => {
+    setShow(!isShow);
+    setEditTaskId('');
+  };
+
+  /**
+   * Get id for edit task and set this
+   * @function handleShow
+   * @param {string} id
+   */
+  const getId = (id) => {
+    setEditTaskId(id);
     setShow(!isShow);
   };
 
@@ -43,13 +60,14 @@ export const TasksList = (props) => {
             description={description}
             deadline={deadline}
             completed={completed}
+            getId={getId}
           />
         ))}
         <button onClick={handleShow} className={styles.addBtn}>
           <span>&#10011;</span>
         </button>
       </div>
-      {isShow && <PopUp handleShow={handleShow} />}
+      {isShow && <PopUp editTaskId={editTaskId} handleShow={handleShow} />}
     </>
   );
 };

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 import reversDate from '../../helpers/reversDate';
@@ -15,11 +15,12 @@ import styles from './Task.module.less';
  * @property {string} description
  * @property {string} deadline
  * @property {boolean} completed
+ * @property {function} getId
  */
 
 /** @param {PropType} props */
 export const Task = (props) => {
-  const { id, title, description, deadline, completed } = props;
+  const { id, title, description, deadline, completed, getId } = props;
 
   /**
    * Delete task from db
@@ -28,7 +29,18 @@ export const Task = (props) => {
    * @param {string} id task id
    */
   const handleDelete = async (id) => {
-    await deleteDoc(doc(db, 'todos', id));
+    // await deleteDoc(doc(db, 'todos', id));
+    await console.log(id);
+  };
+
+  /**
+   * Task completion toggler
+   * @async
+   * @function toggleComplete
+   * @param {string} id task id
+   */
+  const toggleComplete = async (id) => {
+    await updateDoc(doc(db, 'todos', id), { completed: !completed });
   };
 
   return (
@@ -36,6 +48,7 @@ export const Task = (props) => {
       <div className={styles.checker}>
         <input className={styles.checkbox} type="checkbox" id="checkbox" name="checkbox" />
         <label
+          onClick={() => toggleComplete(id)}
           className={`${styles.label} ${completed ? styles.checked : ''}`}
           htmlFor="checkbox"
         />
@@ -46,7 +59,12 @@ export const Task = (props) => {
         </span>
 
         <div className={styles.wrapper}>
-          <p className={`${styles.title} ${completed ? styles.done : ''}`}>{title}</p>
+          <p
+            onClick={() => getId(id)}
+            className={`${styles.title} ${completed ? styles.done : ''}`}
+          >
+            {title}
+          </p>
           <p className={styles.description}>{description}</p>
           <div className={styles.file}>
             <span className={styles.icon}>&#9729;</span>
