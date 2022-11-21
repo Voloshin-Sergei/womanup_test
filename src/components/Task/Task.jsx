@@ -15,12 +15,13 @@ import styles from './Task.module.less';
  * @property {string} description
  * @property {string} deadline
  * @property {boolean} completed
+ * @property {string} prefix
  * @property {function} getId
  */
 
 /** @param {PropType} props */
 export const Task = (props) => {
-  const { id, title, description, deadline, completed, getId } = props;
+  const { id, title, description, deadline, completed, prefix, getId } = props;
 
   /**
    * Delete task from db
@@ -29,8 +30,7 @@ export const Task = (props) => {
    * @param {string} id task id
    */
   const handleDelete = async (id) => {
-    // await deleteDoc(doc(db, 'todos', id));
-    await console.log(id);
+    await deleteDoc(doc(db, 'todos', id));
   };
 
   /**
@@ -61,8 +61,7 @@ export const Task = (props) => {
         <div className={styles.wrapper}>
           <p
             onClick={() => getId(id)}
-            className={`${styles.title} ${completed ? styles.done : ''}`}
-          >
+            className={`${styles.title} ${completed ? styles.done : ''}`}>
             {title}
           </p>
           <p className={styles.description}>{description}</p>

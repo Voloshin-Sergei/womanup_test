@@ -9,7 +9,8 @@ import styles from './TasksList.module.less';
 
 /**
  * @typedef PropType
- * @property {Array<{id: string, title: string, description: string, deadline: string, completed: boolean}>} tasks
+ * @property {Array<{id: string, title: string, description: string, deadline: string, completed: boolean, prefix: string}>} tasks
+ * @property {Array<string>} files
  */
 
 /**
@@ -17,7 +18,7 @@ import styles from './TasksList.module.less';
  * @returns {React.ReactElement}
  */
 export const TasksList = (props) => {
-  const { tasks } = props;
+  const { tasks, files } = props;
 
   /**
    * Condition of PopUp component, initial condition - false
@@ -52,7 +53,7 @@ export const TasksList = (props) => {
   return (
     <>
       <div className={styles.container}>
-        {tasks.map(({ id, title, description, deadline, completed }) => (
+        {tasks.map(({ id, title, description, deadline, completed, prefix }) => (
           <Task
             key={id}
             id={id}
@@ -60,6 +61,7 @@ export const TasksList = (props) => {
             description={description}
             deadline={deadline}
             completed={completed}
+            prefix={prefix}
             getId={getId}
           />
         ))}

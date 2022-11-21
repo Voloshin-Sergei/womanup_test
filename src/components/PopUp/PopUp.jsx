@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../../firebase';
+import { db, storage } from '../../firebase';
 import { collection, addDoc, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { ref, uploadBytes, deleteObject } from 'firebase/storage';
+import uniqid from 'uniqid';
 
 import styles from './PopUp.module.less';
 
@@ -21,14 +23,26 @@ export const PopUp = (props) => {
    * State for title input value, initial state is empty string
    */
   const [title, setTitle] = useState('');
+
   /**
    * State for description input value, initial state is empty string
    */
   const [description, setDescription] = useState('');
+
   /**
    * State for deadline date input value, initial state is empty string
    */
   const [deadline, setDeadline] = useState('');
+
+  /**
+   * State for file, initial state is null
+   */
+  const [fileUpload, setFileUpload] = useState(null);
+
+  /**
+   * State for prefix, initial state is empty string
+   */
+  const [prefix, setPrefix] = useState('');
 
   /**
    * Fetch task data from db and set state for inputs values
@@ -42,9 +56,19 @@ export const PopUp = (props) => {
         setTitle(doc.data().title);
         setDescription(doc.data().description);
         setDeadline(doc.data().deadline);
+        setPrefix(doc.data().prefix);
       });
     }
     return;
+  };
+
+  /**
+   * Used uniqid library, set unique string in field prefix new task. Prefix used for uniq upload file name
+   * @function getPrefix
+   */
+  const getPrefix = () => {
+    const prefix = uniqid();
+    setPrefix(prefix);
   };
 
   /**
@@ -52,6 +76,10 @@ export const PopUp = (props) => {
    */
   useEffect(() => {
     getTask(editTaskId);
+
+    if (!editTaskId) {
+      getPrefix();
+    }
   }, [editTaskId]);
 
   /**
@@ -78,6 +106,30 @@ export const PopUp = (props) => {
   };
 
   /**
+   * Set file to file state
+   * @function handleFileInput
+   * @param {events} e event
+   */
+  const handleFileInput = (e) => {
+    setFileUpload(e.target.files[0]);
+  };
+
+  /**
+   * Upload file to storage
+   * @function uploadFile
+   */
+  const uploadFile = () => {
+    if (fileUpload == null) {
+      return;
+    }
+
+    const fileRef = ref(storage, `todos/${prefix}_${fileUpload.name}`);
+    uploadBytes(fileRef, fileUpload);
+    // const desertRef = ref(storage, 'todos/');
+    // deleteObject(desertRef);
+  };
+
+  /**
    * Add new task to db. Close PopUp
    * @async
    * @function addTask
@@ -91,6 +143,7 @@ export const PopUp = (props) => {
     }
 
     await addDoc(collection(db, 'todos'), {
+      prefix,
       title,
       description,
       deadline,
@@ -98,6 +151,7 @@ export const PopUp = (props) => {
     });
 
     handleShow();
+    uploadFile();
   };
 
   /**
@@ -111,6 +165,7 @@ export const PopUp = (props) => {
     }
 
     await updateDoc(doc(db, 'todos', editTaskId), { title, description, deadline });
+    uploadFile();
     handleShow();
   };
 
@@ -169,7 +224,12 @@ export const PopUp = (props) => {
             <label className={styles.label} htmlFor="file" id="file">
               Upload file
             </label>
-            <input className={`${styles.input} ${styles.file}`} type="file" id="file" />
+            <input
+              onChange={(e) => handleFileInput(e)}
+              className={`${styles.input} ${styles.file}`}
+              type="file"
+              id="file"
+            />
           </div>
         </form>
         <div className={styles.buttons}>
@@ -180,8 +240,7 @@ export const PopUp = (props) => {
           ) : (
             <button
               onClick={() => addTask(title, description, deadline)}
-              className={`${styles.btn} ${styles.btn__confirm}`}
-            >
+              className={`${styles.btn} ${styles.btn__confirm}`}>
               Add
             </button>
           )}
