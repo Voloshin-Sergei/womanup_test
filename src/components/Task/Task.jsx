@@ -1,8 +1,8 @@
 // @ts-check
 
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, deleteObject } from 'firebase/storage';
-import { db } from '../../firebase';
+import { ref, deleteObject } from 'firebase/storage';
+import { db, storage } from '../../firebase';
 
 import reversDate from '../../helpers/reversDate';
 import isExpired from '../../helpers/isExpired';
@@ -20,8 +20,11 @@ import styles from './Task.module.less';
  * @property {Array<string>} uploaded
  */
 
-/** @param {PropType} props */
-export const Task = (props) => {
+/**
+ * @param {PropType} props
+ * @returns {React.ReactElement}
+ */
+const Task = (props) => {
   const { id, title, description, deadline, completed, uploaded, getId } = props;
 
   /**
@@ -31,6 +34,14 @@ export const Task = (props) => {
    * @param {string} id task id
    */
   const handleTaskDelete = async (id) => {
+    uploaded.forEach((file) => {
+      const desertRef = ref(storage, `todos/${file}`);
+      // Delete the file
+      deleteObject(desertRef).catch((error) => {
+        console.log(error);
+      });
+    });
+
     await deleteDoc(doc(db, 'todos', id));
   };
 
@@ -44,9 +55,24 @@ export const Task = (props) => {
     await updateDoc(doc(db, 'todos', id), { completed: !completed });
   };
 
+  /**
+   * Delete file from storage and task's filelist
+   * @async
+   * @function handleFileDelete
+   * @param {string} fileName file name
+   */
   const handleFileDelete = (fileName) => {
-    // const desertRef = ref(storage, 'todos/');
-    // deleteObject(desertRef);
+    const desertRef = ref(storage, `todos/${fileName}`);
+    // Delete the file
+    deleteObject(desertRef)
+      .then(() => {
+        updateDoc(doc(db, 'todos', id), {
+          uploaded: uploaded.filter((file) => file !== fileName),
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -100,3 +126,5 @@ export const Task = (props) => {
     </div>
   );
 };
+
+export default Task;

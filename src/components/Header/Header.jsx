@@ -1,6 +1,9 @@
 import styles from './Header.module.less';
 
-export const Header = () => {
+/**
+ * @returns {React.ReactElement}
+ */
+const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.titleContainer}>
@@ -12,3 +15,5 @@ export const Header = () => {
     </header>
   );
 };
+
+export default Header;

@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
 
 /**
- *the function compares the current date with the deadline date, return
+ *the function compares the current date with the deadline date
  * @function isExpired
  * @param {string} deadline
  * @returns {boolean} true or false

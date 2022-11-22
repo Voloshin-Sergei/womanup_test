@@ -2,23 +2,22 @@
 
 import React, { useState } from 'react';
 
-import { Task } from '../Task/Task';
-import { PopUp } from '../PopUp/PopUp';
+import Task from '../Task/Task';
+import PopUp from '../PopUp/PopUp';
 
 import styles from './TasksList.module.less';
 
 /**
  * @typedef PropType
  * @property {Array<{id: string, title: string, description: string, deadline: string, completed: boolean, uploaded: Array<string>}>} tasks
- * @property {Array<string>} files
  */
 
 /**
  * @param {PropType} props
  * @returns {React.ReactElement}
  */
-export const TasksList = (props) => {
-  const { tasks, files } = props;
+const TasksList = (props) => {
+  const { tasks } = props;
 
   /**
    * Condition of PopUp component, initial condition - false
@@ -73,3 +72,5 @@ export const TasksList = (props) => {
     </>
   );
 };
+
+export default TasksList;
