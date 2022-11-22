@@ -9,7 +9,7 @@ import styles from './TasksList.module.less';
 
 /**
  * @typedef PropType
- * @property {Array<{id: string, title: string, description: string, deadline: string, completed: boolean, prefix: string}>} tasks
+ * @property {Array<{id: string, title: string, description: string, deadline: string, completed: boolean, uploaded: Array<string>}>} tasks
  * @property {Array<string>} files
  */
 
@@ -53,7 +53,7 @@ export const TasksList = (props) => {
   return (
     <>
       <div className={styles.container}>
-        {tasks.map(({ id, title, description, deadline, completed, prefix }) => (
+        {tasks.map(({ id, title, description, deadline, completed, uploaded }) => (
           <Task
             key={id}
             id={id}
@@ -61,7 +61,7 @@ export const TasksList = (props) => {
             description={description}
             deadline={deadline}
             completed={completed}
-            prefix={prefix}
+            uploaded={uploaded}
             getId={getId}
           />
         ))}

@@ -1,6 +1,7 @@
 // @ts-check
 
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { ref, uploadBytes, deleteObject } from 'firebase/storage';
 import { db } from '../../firebase';
 
 import reversDate from '../../helpers/reversDate';
@@ -15,13 +16,13 @@ import styles from './Task.module.less';
  * @property {string} description
  * @property {string} deadline
  * @property {boolean} completed
- * @property {string} prefix
  * @property {function} getId
+ * @property {Array<string>} uploaded
  */
 
 /** @param {PropType} props */
 export const Task = (props) => {
-  const { id, title, description, deadline, completed, prefix, getId } = props;
+  const { id, title, description, deadline, completed, uploaded, getId } = props;
 
   /**
    * Delete task from db
@@ -29,7 +30,7 @@ export const Task = (props) => {
    * @function handleDelete
    * @param {string} id task id
    */
-  const handleDelete = async (id) => {
+  const handleTaskDelete = async (id) => {
     await deleteDoc(doc(db, 'todos', id));
   };
 
@@ -41,6 +42,11 @@ export const Task = (props) => {
    */
   const toggleComplete = async (id) => {
     await updateDoc(doc(db, 'todos', id), { completed: !completed });
+  };
+
+  const handleFileDelete = (fileName) => {
+    // const desertRef = ref(storage, 'todos/');
+    // deleteObject(desertRef);
   };
 
   return (
@@ -61,19 +67,36 @@ export const Task = (props) => {
         <div className={styles.wrapper}>
           <p
             onClick={() => getId(id)}
-            className={`${styles.title} ${completed ? styles.done : ''}`}>
+            className={`${styles.title} ${completed ? styles.done : ''}`}
+          >
             {title}
           </p>
           <p className={styles.description}>{description}</p>
-          <div className={styles.file}>
-            <span className={styles.icon}>&#9729;</span>
-            <span className={styles.name}>velit at commodi.</span>
-          </div>
+          {uploaded && (
+            <ul>
+              {uploaded.map((file) => (
+                <li key={file} className={styles.file}>
+                  <span className={styles.icon}>&#9729;</span>
+                  <span className={styles.name}>{file.split('_')[1]}</span>
+                  <button
+                    onClick={() => handleFileDelete(file)}
+                    className={`${styles.delete} ${styles.delete__file}`}
+                  >
+                    &#10006;
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
-      <span onClick={() => handleDelete(id)} className={styles.delete}>
+
+      <button
+        onClick={() => handleTaskDelete(id)}
+        className={`${styles.delete} ${styles.delete__task}`}
+      >
         &#10006;
-      </span>
+      </button>
     </div>
   );
 };

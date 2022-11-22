@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../../firebase';
 import { collection, addDoc, onSnapshot, doc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, deleteObject } from 'firebase/storage';
+import { ref, uploadBytes } from 'firebase/storage';
 import uniqid from 'uniqid';
 
 import styles from './PopUp.module.less';
@@ -40,6 +40,11 @@ export const PopUp = (props) => {
   const [fileUpload, setFileUpload] = useState(null);
 
   /**
+   * State for uploaded files, initial state is empty array
+   */
+  const [uploaded, setUploaded] = useState([]);
+
+  /**
    * State for prefix, initial state is empty string
    */
   const [prefix, setPrefix] = useState('');
@@ -56,14 +61,14 @@ export const PopUp = (props) => {
         setTitle(doc.data().title);
         setDescription(doc.data().description);
         setDeadline(doc.data().deadline);
-        setPrefix(doc.data().prefix);
+        setUploaded(doc.data().uploaded);
       });
     }
     return;
   };
 
   /**
-   * Used uniqid library, set unique string in field prefix new task. Prefix used for uniq upload file name
+   * Used uniqid library, set unique string to uploaded file
    * @function getPrefix
    */
   const getPrefix = () => {
@@ -76,11 +81,10 @@ export const PopUp = (props) => {
    */
   useEffect(() => {
     getTask(editTaskId);
-
-    if (!editTaskId) {
-      getPrefix();
-    }
+    getPrefix();
   }, [editTaskId]);
+
+  useEffect(() => {});
 
   /**
    * Set condition for input elements
@@ -112,6 +116,7 @@ export const PopUp = (props) => {
    */
   const handleFileInput = (e) => {
     setFileUpload(e.target.files[0]);
+    setUploaded([...uploaded, `${prefix}_${e.target.files[0].name}`]);
   };
 
   /**
@@ -125,8 +130,12 @@ export const PopUp = (props) => {
 
     const fileRef = ref(storage, `todos/${prefix}_${fileUpload.name}`);
     uploadBytes(fileRef, fileUpload);
-    // const desertRef = ref(storage, 'todos/');
-    // deleteObject(desertRef);
+
+    if (editTaskId) {
+      updateDoc(doc(db, 'todos', editTaskId), {
+        uploaded: [...uploaded],
+      });
+    }
   };
 
   /**
@@ -143,15 +152,15 @@ export const PopUp = (props) => {
     }
 
     await addDoc(collection(db, 'todos'), {
-      prefix,
       title,
       description,
       deadline,
       completed: false,
+      uploaded,
     });
 
-    handleShow();
     uploadFile();
+    handleShow();
   };
 
   /**
@@ -240,7 +249,8 @@ export const PopUp = (props) => {
           ) : (
             <button
               onClick={() => addTask(title, description, deadline)}
-              className={`${styles.btn} ${styles.btn__confirm}`}>
+              className={`${styles.btn} ${styles.btn__confirm}`}
+            >
               Add
             </button>
           )}

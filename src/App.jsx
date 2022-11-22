@@ -23,7 +23,6 @@ function App() {
    * App state, files list, initial state is empty array
    */
   const [files, setFiles] = useState([]);
-  console.log(files);
   /**
    * Fetch todos collection and set state
    */

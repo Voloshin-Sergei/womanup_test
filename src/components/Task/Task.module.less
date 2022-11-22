@@ -171,12 +171,21 @@
 }
 
 .delete {
-  margin-left: auto;
+  border: none;
   .text(@color_alert, 400, 1.6rem);
-  line-height: 1.2rem;
   cursor: pointer;
 
   @media (max-width: @small) {
     font-size: 1.4rem;
+  }
+
+  &__task {
+    margin-left: auto;
+    align-self: flex-start;
+    line-height: 1.2rem;
+  }
+
+  &__file {
+    margin-left: 0.5rem;
   }
 }
