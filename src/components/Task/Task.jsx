@@ -103,7 +103,9 @@ const Task = (props) => {
               {uploaded.map((file) => (
                 <li key={file} className={styles.file}>
                   <span className={styles.icon}>&#9729;</span>
-                  <span className={styles.name}>{file.split('_')[1]}</span>
+                  <span className={styles.name}>
+                    {file.substring(file.indexOf('_') + 1, file.length)}
+                  </span>
                   <button
                     onClick={() => handleFileDelete(file)}
                     className={`${styles.delete} ${styles.delete__file}`}
